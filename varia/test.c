@@ -1,6 +1,7 @@
 #include "lkls.h"
 #include "lkstk.h"
 #include "lkque.h"
+#include "bitree.h"
 #include <stdio.h>
 
 int test(){
@@ -52,8 +53,38 @@ void test_que()
   j++;
   }
 }
+int compare(void* max,void* min,int maxsz,int minsz)
+{
+  int* imax=(int*)max;
+  int* imin=(int*)min;
+  if(*imax>*imin)
+    return 1;
+  else if(*imax<*imin)
+    return -1;
+  else
+    return 0;
+}
+void test_bitree()
+{
+  vr_bitree* bitree=vr_bitree_new(compare);
+  int i=0,j=0,key=1,val=1,ret=0;
+  while(i<10){
+    vr_bitree_ins(bitree,&i,&i,4,4);
+    i++;
+  }
+  vr_bitree_del(bitree,&val,4);
+  val++;
+  vr_bitree_del(bitree,&val,4);
+
+  while(j<10){
+    int get=vr_bitree_get(bitree,&j,&ret,4,NULL);
+    printf("bitree:%d,get:%d\n",ret,get);
+    j++;
+  }
+}
 int main(){
-  test();
-  test_lkstk();
+  //test();
+  //test_lkstk();
   //test_que();
+  test_bitree();
 }

@@ -3,8 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "node.h"
-#include "type.h"
+#include "include/types.h"
 
 #define ERR_HDL(MSG)				\
   do{						\
