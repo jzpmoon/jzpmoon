@@ -29,7 +29,7 @@ struct vr_slist {
   int size;
 };
 
-__declspec(dllexport) vr_slist* vr_slist_new();
+vr_slist* vr_slist_new();
 void vr_slist_des(vr_slist* ls,vr_val_des_func des);
 void vr_slist_ins(vr_slist* ls,void* val,int pos);
 void vr_slist_apd(vr_slist* ls,void* val);
