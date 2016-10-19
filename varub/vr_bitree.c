@@ -28,11 +28,11 @@ void vr_bitree_des(vr_bitree* tree)
 
 void vr_bitree_ins(vr_bitree* tree,void* key,void* val)
 {
+  vr_bitree_nd* par_nd=NULL;
+  vr_bitree_nd* nd=NULL;
   if(val==NULL){
     vr_bitree_del(tree,key);
   }
-  vr_bitree_nd* par_nd=NULL;
-  vr_bitree_nd* nd=NULL;
   vr_bitree_get_tglt(tree->root,key,NULL,&par_nd,&nd,tree->comp);
   if(nd)
     vr_bitree_nd_set(nd,key,val);

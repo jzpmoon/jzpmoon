@@ -21,6 +21,7 @@ int test(){
   while(j<10){
     printf("slist:%d\n",*(int*)vr_slist_get(ls,j++));
   }
+  return 0;
 }
 
 void test_queue()
@@ -65,15 +66,16 @@ int trav(void* key,void* val)
 }
 int test_bitree()
 {
-  printf("begin bitree\n");  
   vr_bitree* tree=vr_bitree_new(comp);
   int val[10]={1,0,2,3,4,7,6,5,8,9};
   int i=0;
+  printf("begin bitree\n");
   while(i<10){
     vr_bitree_ins(tree,&val[i],&val[i]);i++;
   }
   vr_bitree_trav(tree,trav,VR_TREE_IN_ORDER_TRAV);
   printf("end bitree\n");
+  return 0;
 }
 
 int test_rbtree()
@@ -95,6 +97,7 @@ int test_rbtree()
   /*   j++; */
   /* } */
   vr_rbtree_trav(tree,trav,VR_TREE_PRE_ORDER_TRAV);
+  return 0;
 }
 
 int main(){

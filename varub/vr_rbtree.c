@@ -40,13 +40,13 @@ void vr_rbtree_des(vr_rbtree* tree)
 
 void vr_rbtree_ins(vr_rbtree* tree,void* key,void* val)
 {
+  vr_rbt_nd* gra_nd=NULL;
+  vr_rbt_nd* par_nd=NULL;
+  vr_rbt_nd* nd=NULL;
   if(val==NULL){
     vr_rbtree_del(tree,key);
     return;
   }
-  vr_rbt_nd* gra_nd=NULL;
-  vr_rbt_nd* par_nd=NULL;
-  vr_rbt_nd* nd=NULL;
   vr_rbt_nd_tglt(tree->root,key,&gra_nd,&par_nd,&nd,tree->cmp);
   if(nd)
     vr_rbt_nd_set(nd,key,val);
@@ -111,6 +111,8 @@ void vr_rbtree_del(vr_rbtree* tree,void* key)
   vr_rbt_nd* nd=NULL;
   vr_rbt_nd* del_nd=NULL;
   vr_rbt_nd* fix_nd=NULL;
+  vr_rbt_nd* w_nd=NULL;
+  int color_del_nd=0;
   vr_rbt_nd_tglt(tree->root,key,NULL,&par_nd,&nd,tree->cmp);
   if(!nd) return;
   if(nd->left==NULL||nd->right==NULL)
@@ -136,7 +138,7 @@ void vr_rbtree_del(vr_rbtree* tree,void* key)
     nd->key=del_nd->key;
     nd->val=del_nd->val;
   }
-  int color_del_nd=vr_rbt_nd_color(del_nd);
+  color_del_nd=vr_rbt_nd_color(del_nd);
   vr_rbt_nd_des(del_nd);
   tree->size--;
   if(color_del_nd==VR_RED)
@@ -148,7 +150,6 @@ void vr_rbtree_del(vr_rbtree* tree,void* key)
     }
     if(!par_nd)
       break;
-    vr_rbt_nd* w_nd=NULL;
     if(par_nd->left==fix_nd){
       w_nd=par_nd->right;
       if(!w_nd){

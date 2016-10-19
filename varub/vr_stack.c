@@ -24,8 +24,9 @@ void vr_stack_push(vr_stack* stk,void* val)
 
 void* vr_stack_pop(vr_stack* stk)
 {
+  void* val=NULL;
   VR_STK_EMPTY_CHK(vr_slist_size(stk));
-  void* val=vr_slist_get(stk,0);
+  val=vr_slist_get(stk,0);
   vr_slist_del(stk,0,NULL);
   return val;
 }

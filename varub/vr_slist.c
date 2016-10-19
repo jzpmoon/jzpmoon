@@ -12,17 +12,17 @@ static vr_slist_nd* vr_slist_get_nd(vr_slist* ls,int pos);
 
 static vr_slist_nd* vr_slist_get_nd(vr_slist* ls,int pos)
 {
+  vr_slist_nd* nd=NULL;
   int ls_size=ls->size;
+  int i=0;
   if(pos==ls_size-1)
     return ls->foot;
-  vr_slist_nd* nd=ls->head;
-  int i=0;
-  while(i<ls_size){
-    if(pos==i)
-      return nd;
+  nd=ls->head;
+  while(i<pos){
     nd=nd->next;
     i++;
   }
+  return nd;
 }
 
 static vr_slist_nd* vr_slist_nd_new()
@@ -69,10 +69,11 @@ void vr_slist_des(vr_slist* ls,vr_val_des_func des)
 
 void vr_slist_ins(vr_slist* ls,void* val,int pos)
 {
-  VR_IDX_CHK(ls->size+1,pos);
-  vr_slist_nd* new_nd=vr_slist_nd_new();
-  vr_slist_nd_set(new_nd,val);
   vr_slist_nd* nd=NULL;
+  vr_slist_nd* new_nd=NULL;
+  VR_IDX_CHK(ls->size+1,pos);
+  new_nd=vr_slist_nd_new();
+  vr_slist_nd_set(new_nd,val);
   if(pos==0){
     nd=ls->head;
     ls->head=new_nd;
@@ -95,23 +96,25 @@ void vr_slist_apd(vr_slist* ls,void* val)
 
 void vr_slist_upd(vr_slist* ls,void* val,int pos)
 {
+  vr_slist_nd* nd=NULL;
   VR_IDX_CHK(ls->size,pos);
-  vr_slist_nd* nd=vr_slist_get_nd(ls,pos);
+  nd=vr_slist_get_nd(ls,pos);
   vr_slist_nd_set(nd,val);
 }
 
 void* vr_slist_get(vr_slist* ls,int pos)
 {
+  vr_slist_nd* nd=NULL;
   VR_IDX_CHK(ls->size,pos);
-  vr_slist_nd* nd=vr_slist_get_nd(ls,pos);
+  nd=vr_slist_get_nd(ls,pos);
   return vr_slist_nd_get(nd);
 }
 
 void vr_slist_del(vr_slist* ls,int pos,vr_val_des_func des)
 {
-  VR_IDX_CHK(ls->size,pos);
   vr_slist_nd* prv_nd=NULL;
   vr_slist_nd* nd=NULL;
+  VR_IDX_CHK(ls->size,pos);
   if(pos==0){
     nd=ls->head;
     ls->head=nd->next;
