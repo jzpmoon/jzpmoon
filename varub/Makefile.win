@@ -1,0 +1,9 @@
+bin=test.exe
+obj=test.obj vr_slist.obj vr_queue.obj vr_stack.obj vr_bitree.obj vr_rbtree.obj  vr_closure.obj vr_list.obj
+$(bin):$(obj)
+	link /DEBUG /OUT:$@ $(obj)
+.c.obj:
+	cl /c /Zi $<
+
+clean:
+	del *.obj *.pdb *.ilk $(bin)

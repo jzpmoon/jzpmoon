@@ -8,5 +8,6 @@ typedef int (*vr_hook_func)();
 typedef void(*vr_val_des_func)(void*);
 typedef int (*vr_compare_func)(void* max,void* min);
 typedef int(*vr_trav_func)(void* key,void* val);
+typedef void(*vr_closure_func)(void* params,void* retval);
 
 #endif
