@@ -10,11 +10,18 @@
 
 typedef struct vr_slist vr_queue;
 
+
+VR_DECLARE_EXPORT
 vr_queue* vr_queue_new();
+VR_DECLARE_EXPORT
 void vr_queue_des(vr_queue* que,vr_val_des_func des);
+VR_DECLARE_EXPORT
 void vr_queue_enq(vr_queue* que,void* val);
-void* vr_queue_deq(vr_queue* que);
+VR_DECLARE_EXPORT
+void* vr_queue_deq(vr_queue* que,vr_val_des_func des);
+VR_DECLARE_EXPORT
 void vr_queue_cln(vr_queue* que,vr_val_des_func des);
+VR_DECLARE_EXPORT
 int vr_queue_size(vr_queue* que);
 
 #endif

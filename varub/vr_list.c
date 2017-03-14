@@ -1,8 +1,8 @@
-#include <stdlib.h>
 #include "include/vr_list.h"
 
 static vr_list_node* vr_list_node_new(void* data);
-static void vr_list_node_des(vr_list_node* node,vr_closure* desr);
+static void vr_list_node_des(vr_list_node* node,
+			     vr_val_des_func des);
 
 vr_list* vr_list_new()
 {
@@ -16,20 +16,8 @@ int vr_list_init(vr_list* list)
   if(!list) return -1;
   list->head=NULL;
   list->foot=NULL;
-  list->cmpr=vr_closure_new();
-  list->desr=vr_closure_new();
   list->length=0;
   return 0;
-}
-
-void vr_list_cmpr(vr_list* list,vr_closure_func* func)
-{
-  vr_list_append(list->cmpr,func);
-}
-
-void vr_list_desr(vr_list* list,vr_closure_func* func)
-{
-  vr_list_append(list->desr,func);
 }
 
 int vr_list_insert(vr_list* list,void* data,int position)
@@ -112,7 +100,7 @@ void* vr_list_index(vr_index index)
   return index->data;
 }
 
-int vr_list_del(vr_list* list,vr_index index)
+int vr_list_del(vr_list* list,vr_index index,vr_val_des_func des)
 {
   vr_list_node* node=list->head;
   while(node)
@@ -125,7 +113,7 @@ int vr_list_del(vr_list* list,vr_index index)
 	    list->head=node->next;
 	  if(list->foot=node)
 	    list->foot=node->prev;
-	  vr_list_node_des(node,list->desr);
+	  vr_list_node_des(node,des);
 	  break;
 	}
       if(list->foot==node) break;
@@ -134,30 +122,28 @@ int vr_list_del(vr_list* list,vr_index index)
   return --list->length;
 }
 
-void vr_list_cln(vr_list* list)
+void vr_list_cln(vr_list* list,vr_val_des_func des)
 {
   vr_list_node* node=list->head;
   while(node)
     {
       if(list->foot==node)
 	{
-	  vr_list_node_des(node,list->desr);
+	  vr_list_node_des(node,des);
 	  break;
 	}
       node=node->next;
-      vr_list_node_des(node->prev,list->desr);
+      vr_list_node_des(node->prev,des);
     }
   list->head=NULL;
   list->foot=NULL;
   list->length=0;
 }
 
-void vr_list_des(vr_list* list)
+void vr_list_des(vr_list* list,vr_val_des_func des)
 {
   if(!list) return;
-  vr_list_cln(list);
-  vr_list_des(list->cmpr);
-  vr_list_des(list->desr);
+  vr_list_cln(list,des);
   free(list);
 }
 
@@ -169,12 +155,9 @@ static vr_list_node* vr_list_node_new(void* data)
   return node;
 }
 
-static void vr_list_node_des(vr_list_node* node,vr_closure* desr)
+static void vr_list_node_des(vr_list_node* node,vr_val_des_func des)
 {
-  if(desr)
-    {
-      void* params=node->data;
-      vr_closure_exec(desr,&params,NULL);
-    }
+  if(des)
+    des(node->data);
   free(node);
 }

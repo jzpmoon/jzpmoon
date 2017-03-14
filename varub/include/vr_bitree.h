@@ -37,11 +37,11 @@ struct vr_bitree {
 };
 
 vr_bitree* vr_bitree_new(vr_compare_func comp);
-void vr_bitree_des(vr_bitree* tree);
-void vr_bitree_ins(vr_bitree* tree,void* key,void* val);
+void vr_bitree_des(vr_bitree* tree,vr_kv_des_func des);
+int vr_bitree_ins(vr_bitree* tree,void* key,void* val);
 void* vr_bitree_get(vr_bitree* tree,void* key);
 void vr_bitree_trav(vr_bitree* tree,vr_trav_func hook,int type);
-void vr_bitree_del(vr_bitree* tree,void* key);
-void vr_bitree_cln(vr_bitree* tree);
+void vr_bitree_del(vr_bitree* tree,void* key,vr_kv_des_func des);
+void vr_bitree_cln(vr_bitree* tree,vr_kv_des_func des);
 int vr_bitree_size(vr_bitree* tree);
 #endif

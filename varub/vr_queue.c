@@ -22,12 +22,12 @@ void vr_queue_enq(vr_queue* que,void* val)
   vr_slist_apd(que,val);
 }
 
-void* vr_queue_deq(vr_queue* que)
+void* vr_queue_deq(vr_queue* que,vr_val_des_func des)
 {
   void* val=NULL;
   VR_QUE_EMPTY_CHK(vr_slist_size(que));
   val=vr_slist_get(que,0);
-  vr_slist_del(que,0,NULL);
+  vr_slist_del(que,0,des);
   return val;
 }
 

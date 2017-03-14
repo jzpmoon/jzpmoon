@@ -3,6 +3,7 @@
 #include "include/vr_stack.h"
 #include "include/vr_bitree.h"
 #include "include/vr_rbtree.h"
+#include "include/vr_list.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -33,7 +34,7 @@ void test_queue()
     vr_queue_enq(ls,&val[i++]);
   }
   while(j++<10){
-    printf("queue:%d:%d\n",*(int*)vr_queue_deq(ls),vr_queue_size(ls));
+    printf("queue:%d:%d\n",*(int*)vr_queue_deq(ls,NULL),vr_queue_size(ls));
   }
 }
 
@@ -47,7 +48,7 @@ void test_stack()
   }
   val[3]=20;
   while(j++<10){
-    printf("stack:%d\n",*(int*)vr_stack_pop(ls));
+    printf("stack:%d\n",*(int*)vr_stack_pop(ls,NULL));
   }
 }
 
@@ -81,23 +82,42 @@ int test_bitree()
 int test_rbtree()
 {
   vr_rbtree* tree=vr_rbtree_new(comp);
-  int val[20];
+  int val[10];
   int k=0,i=0,j=0;
   
-  while(k<20){
+  while(k<10){
     val[k]=k;k++;
   }
 
-  while(i<20){
+  while(i<10){
     vr_rbtree_ins(tree,&val[i],&val[i]);i++;
   }
-  
-  /* while(j<20){ */
-  /*   vr_rbtree_del(tree,&val[j]); */
-  /*   j++; */
-  /* } */
+  printf("begin rbtree in order!!!\n");
+  vr_rbtree_trav(tree,trav,VR_TREE_IN_ORDER_TRAV);
+  printf("end rbtree in order!!!\n");
+  printf("begin rbtree pre order!!!\n");
   vr_rbtree_trav(tree,trav,VR_TREE_PRE_ORDER_TRAV);
+  printf("end rbtree pre order!!!\n");
   return 0;
+}
+
+void test_list(){
+  int val[10];
+  int k=0,i=0,j=0;
+  
+  while(k<10){
+    val[k]=k;k++;
+  }
+  vr_list* list=vr_list_new();
+  while(i<10){
+    vr_list_append(list,&val[i]);i++;
+  }
+  vr_index index=vr_list_head(list);
+  while(index){
+    void* data=vr_list_index(index);
+    printf("list data:%d\n",*(int*)data);
+    index=vr_list_next(list,index);
+  }
 }
 
 int main(){
@@ -106,4 +126,5 @@ int main(){
   test_stack();
   test_bitree();
   test_rbtree();
+  test_list();
 }

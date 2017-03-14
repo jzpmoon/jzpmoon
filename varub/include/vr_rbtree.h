@@ -25,12 +25,28 @@ struct vr_rbtree {
   int size;
 };
 
+#define vr_rbtree_init(tree,cmp)		\
+  do{						\
+    (tree)->root=NULL;				\
+    (tree)->cmp=(cmp);				\
+    (tree)->size=0;				\
+  }while(0)
+
+VR_DECLARE_EXPORT
 vr_rbtree* vr_rbtree_new(vr_compare_func cmp);
-void vr_rbtree_des(vr_rbtree* tree);
-void vr_rbtree_ins(vr_rbtree* tree,void* key,void* val);
+VR_DECLARE_EXPORT
+void vr_rbtree_des(vr_rbtree* tree,vr_kv_des_func des);
+VR_DECLARE_EXPORT
+int vr_rbtree_ins(vr_rbtree* tree,void* key,void* val);
+VR_DECLARE_EXPORT
 void* vr_rbtree_get(vr_rbtree* tree,void* key);
-void vr_rbtree_del(vr_rbtree* tree,void* key);
-void vr_rbtree_cln(vr_rbtree* tree);
+VR_DECLARE_EXPORT
+void vr_rbtree_del(vr_rbtree* tree,void* key,vr_kv_des_func des);
+VR_DECLARE_EXPORT
+void vr_rbtree_cln(vr_rbtree* tree,vr_kv_des_func des);
+VR_DECLARE_EXPORT
 int vr_rbtree_size(vr_rbtree* tree);
+VR_DECLARE_EXPORT
 void vr_rbtree_trav(vr_rbtree* tree,vr_trav_func hook,int type);
-#endif 
+
+#endif

@@ -10,11 +10,17 @@
 
 typedef struct vr_slist vr_stack;
 
+VR_DECLARE_EXPORT
 vr_stack* vr_stack_new();
+VR_DECLARE_EXPORT
 void vr_stack_des(vr_stack* stk,vr_val_des_func des);
+VR_DECLARE_EXPORT
 void vr_stack_push(vr_stack* stk,void* val);
-void* vr_stack_pop(vr_stack* stk);
+VR_DECLARE_EXPORT
+void* vr_stack_pop(vr_stack* stk,vr_val_des_func des);
+VR_DECLARE_EXPORT
 void vr_stack_cln(vr_stack* stk,vr_val_des_func des);
+VR_DECLARE_EXPORT
 int vr_stack_size(vr_stack* stk);
 
 #endif

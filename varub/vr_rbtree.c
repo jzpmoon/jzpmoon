@@ -6,7 +6,7 @@
 
 static vr_rbt_nd* vr_rbt_nd_new();
 static void vr_rbt_nd_set(vr_rbt_nd* nd,void* key,void* val);
-static void vr_rbt_nd_des(vr_rbt_nd* nd);
+static void vr_rbt_nd_des(vr_rbt_nd* nd,vr_kv_des_func des);
 static void vr_rbt_nd_tglt(vr_rbt_nd* root,
 		     void* key,
 		     vr_rbt_nd** gra_nd,
@@ -25,31 +25,27 @@ static vr_rbt_nd* vr_rbt_first(vr_rbt_nd* nd);
 vr_rbtree* vr_rbtree_new(vr_compare_func cmp){
   vr_rbtree* tree=(vr_rbtree*)malloc(sizeof(vr_rbtree));
   if(tree){
-    tree->root=NULL;
-    tree->cmp=cmp;
-    tree->size=0;
+    vr_rbtree_init(tree,cmp);
   }
   return tree;
 }
 
-void vr_rbtree_des(vr_rbtree* tree)
+void vr_rbtree_des(vr_rbtree* tree,vr_kv_des_func des)
 {
-  vr_rbtree_cln(tree);
+  vr_rbtree_cln(tree,des);
   free(tree);
 }
 
-void vr_rbtree_ins(vr_rbtree* tree,void* key,void* val)
+int vr_rbtree_ins(vr_rbtree* tree,void* key,void* val)
 {
   vr_rbt_nd* gra_nd=NULL;
   vr_rbt_nd* par_nd=NULL;
   vr_rbt_nd* nd=NULL;
-  if(val==NULL){
-    vr_rbtree_del(tree,key);
-    return;
-  }
+  if(key==NULL||val==NULL)
+    return -1;
   vr_rbt_nd_tglt(tree->root,key,&gra_nd,&par_nd,&nd,tree->cmp);
   if(nd)
-    vr_rbt_nd_set(nd,key,val);
+    return -1;
   else{
     nd=vr_rbt_nd_new();
     vr_rbt_nd_set(nd,key,val);
@@ -94,6 +90,7 @@ void vr_rbtree_ins(vr_rbtree* tree,void* key,void* val)
     }
     tree->size++;
   }
+  return tree->size;
 }
 
 void* vr_rbtree_get(vr_rbtree* tree,void* key)
@@ -105,7 +102,7 @@ void* vr_rbtree_get(vr_rbtree* tree,void* key)
   return NULL;
 }
 
-void vr_rbtree_del(vr_rbtree* tree,void* key)
+void vr_rbtree_del(vr_rbtree* tree,void* key,vr_kv_des_func des)
 {
   vr_rbt_nd* par_nd=NULL;
   vr_rbt_nd* nd=NULL;
@@ -139,7 +136,7 @@ void vr_rbtree_del(vr_rbtree* tree,void* key)
     nd->val=del_nd->val;
   }
   color_del_nd=vr_rbt_nd_color(del_nd);
-  vr_rbt_nd_des(del_nd);
+  vr_rbt_nd_des(del_nd,des);
   tree->size--;
   if(color_del_nd==VR_RED)
     return;
@@ -232,13 +229,13 @@ void vr_rbtree_trav(vr_rbtree* tree,vr_trav_func hook,int type)
   }
 }
 
-void vr_rbtree_cln(vr_rbtree* tree)
+void vr_rbtree_cln(vr_rbtree* tree,vr_kv_des_func des)
 {
   vr_rbt_nd* nd=vr_rbt_first(tree->root);
   vr_rbt_nd* next=NULL;
   while(nd){
     next=vr_rbt_nd_next(nd);
-    vr_rbt_nd_des(nd);
+    vr_rbt_nd_des(nd,des);
     nd=next;
   }
 }
@@ -314,8 +311,10 @@ static vr_rbt_nd* vr_rbt_nd_new()
   return nd;
 }
 
-static void vr_rbt_nd_des(vr_rbt_nd* nd)
+static void vr_rbt_nd_des(vr_rbt_nd* nd,vr_kv_des_func des)
 {
+  if(des)
+    des(nd->key,nd->val);
   free(nd);
 }
 
@@ -338,7 +337,7 @@ static void vr_rbt_pre_order(vr_rbt_nd* root,vr_trav_func hook)
       if((*hook)(tmp_nd->key,tmp_nd->val)==-1) break;
     }else{
       if(vr_stack_size(stk))
-	nd=vr_stack_pop(stk);
+	nd=vr_stack_pop(stk,NULL);
       else
 	break;
     }
@@ -357,7 +356,7 @@ static void vr_rbt_in_order(vr_rbt_nd* root,vr_trav_func hook)
       nd=nd->left;
     } else {
       if(vr_stack_size(stk)){
-	tmp_nd=vr_stack_pop(stk);
+	tmp_nd=vr_stack_pop(stk,NULL);
 	nd=tmp_nd->right;
 	if((*hook)(tmp_nd->key,tmp_nd->val)==-1) break;
       } else{
@@ -388,7 +387,7 @@ static void vr_rbt_post_order(vr_rbt_nd* root,vr_trav_func hook)
       }
     }
     if(vr_stack_size(stk))
-      nd=vr_stack_pop(stk);
+      nd=vr_stack_pop(stk,NULL);
     else
       break;
   } while(1);

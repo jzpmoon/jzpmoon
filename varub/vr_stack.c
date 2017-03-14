@@ -22,12 +22,12 @@ void vr_stack_push(vr_stack* stk,void* val)
   vr_slist_ins(stk,val,0);
 }
 
-void* vr_stack_pop(vr_stack* stk)
+void* vr_stack_pop(vr_stack* stk,vr_val_des_func des)
 {
   void* val=NULL;
   VR_STK_EMPTY_CHK(vr_slist_size(stk));
   val=vr_slist_get(stk,0);
-  vr_slist_del(stk,0,NULL);
+  vr_slist_del(stk,0,des);
   return val;
 }
 

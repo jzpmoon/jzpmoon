@@ -29,14 +29,23 @@ struct vr_slist {
   int size;
 };
 
+VR_DECLARE_EXPORT
 vr_slist* vr_slist_new();
+VR_DECLARE_EXPORT
 void vr_slist_des(vr_slist* ls,vr_val_des_func des);
+VR_DECLARE_EXPORT
 void vr_slist_ins(vr_slist* ls,void* val,int pos);
+VR_DECLARE_EXPORT
 void vr_slist_apd(vr_slist* ls,void* val);
+VR_DECLARE_EXPORT
 void vr_slist_upd(vr_slist* ls,void* val,int pos);
+VR_DECLARE_EXPORT
 void* vr_slist_get(vr_slist* ls,int pos);
+VR_DECLARE_EXPORT
 void vr_slist_del(vr_slist* ls,int pos,vr_val_des_func des);
+VR_DECLARE_EXPORT
 void vr_slist_cln(vr_slist* ls,vr_val_des_func des);
+VR_DECLARE_EXPORT
 int vr_slist_size(vr_slist* ls);
 
 #endif

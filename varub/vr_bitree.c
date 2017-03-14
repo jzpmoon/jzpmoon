@@ -3,7 +3,7 @@
 #include "include/vr_stack.h"
 
 vr_bitree_nd* vr_bitree_nd_new();
-void vr_bitree_nd_des(vr_bitree_nd* nd);
+void vr_bitree_nd_des(vr_bitree_nd* nd,vr_kv_des_func des);
 void vr_bitree_nd_set(vr_bitree_nd* nd,void* key,void* val);
 void vr_bitree_nd_get(vr_bitree_nd* nd,void** key,void** val);
 void vr_bitree_get_tglt(vr_bitree_nd* root,void* key,vr_bitree_nd** gra_nd,vr_bitree_nd** par_nd,vr_bitree_nd** nd,vr_compare_func comp);
@@ -20,22 +20,22 @@ vr_bitree* vr_bitree_new(vr_compare_func comp)
   return tree;
 }
 
-void vr_bitree_des(vr_bitree* tree)
+void vr_bitree_des(vr_bitree* tree,vr_kv_des_func des)
 {
-  vr_bitree_cln(tree);
+  vr_bitree_cln(tree,des);
   free(tree);
 }
 
-void vr_bitree_ins(vr_bitree* tree,void* key,void* val)
+int vr_bitree_ins(vr_bitree* tree,void* key,void* val)
 {
   vr_bitree_nd* par_nd=NULL;
   vr_bitree_nd* nd=NULL;
-  if(val==NULL){
-    vr_bitree_del(tree,key);
+  if(key==NULL||val==NULL){
+    return -1;
   }
   vr_bitree_get_tglt(tree->root,key,NULL,&par_nd,&nd,tree->comp);
   if(nd)
-    vr_bitree_nd_set(nd,key,val);
+    return -1;
   else{
     nd=vr_bitree_nd_new();
     vr_bitree_nd_set(nd,key,val);
@@ -50,6 +50,7 @@ void vr_bitree_ins(vr_bitree* tree,void* key,void* val)
     }
     tree->size++;
   }
+  return tree->size;
 }
 
 void* vr_bitree_get(vr_bitree* tree,void* key)
@@ -71,7 +72,7 @@ void vr_bitree_trav(vr_bitree* tree,vr_trav_func hook,int order)
   }
 }
 
-void vr_bitree_del(vr_bitree* tree,void* key)
+void vr_bitree_del(vr_bitree* tree,void* key,vr_kv_des_func des)
 {
   vr_bitree_nd* nd=NULL;
   vr_bitree_nd* del_nd=NULL;
@@ -100,18 +101,18 @@ void vr_bitree_del(vr_bitree* tree,void* key)
     vr_bitree_nd_get(del_nd,&key,&val);
     vr_bitree_nd_set(nd,key,val);
   }
-  vr_bitree_nd_des(del_nd);
+  vr_bitree_nd_des(del_nd,des);
   tree->size--;
 }
 
 static int vr_compare_alway_eq(void* max,void* min){return 0;}
-void vr_bitree_cln(vr_bitree* tree)
+void vr_bitree_cln(vr_bitree* tree,vr_kv_des_func des)
 {
   vr_bitree_nd* del_nd=NULL;
   while(1){
     vr_bitree_get_tglt(tree->root,NULL,NULL,NULL,&del_nd,vr_compare_alway_eq);
     if(del_nd==NULL) break;
-    vr_bitree_del(tree,del_nd->key);
+    vr_bitree_del(tree,del_nd->key,des);
   }
 }
 
@@ -132,7 +133,7 @@ void vr_bitree_pre_order(vr_bitree_nd* root,vr_trav_func hook)
       if((*hook)(tmp_nd->key,tmp_nd->val)==-1) break;
     }else{
       if(vr_stack_size(stk))
-	nd=vr_stack_pop(stk);
+	nd=vr_stack_pop(stk,NULL);
       else
 	break;
     }
@@ -151,7 +152,7 @@ void vr_bitree_in_order(vr_bitree_nd* root,vr_trav_func hook)
       nd=nd->left;
     } else {
       if(vr_stack_size(stk)){
-	tmp_nd=vr_stack_pop(stk);
+	tmp_nd=vr_stack_pop(stk,NULL);
 	nd=tmp_nd->right;
 	if((*hook)(tmp_nd->key,tmp_nd->val)==-1) break;
       } else{
@@ -182,7 +183,7 @@ void vr_bitree_post_order(vr_bitree_nd* root,vr_trav_func hook)
       }
     }
     if(vr_stack_size(stk))
-      nd=vr_stack_pop(stk);
+      nd=vr_stack_pop(stk,NULL);
     else
       break;
   } while(1);
@@ -220,8 +221,10 @@ vr_bitree_nd* vr_bitree_nd_new()
   return nd;
 }
 
-void vr_bitree_nd_des(vr_bitree_nd* nd)
+void vr_bitree_nd_des(vr_bitree_nd* nd,vr_kv_des_func des)
 {
+  if(des)
+    des(nd->key,nd->val);
   free(nd);
 }
 
