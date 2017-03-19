@@ -100,26 +100,27 @@ void* vr_list_index(vr_index index)
   return index->data;
 }
 
-int vr_list_del(vr_list* list,vr_index index,vr_val_des_func des)
+vr_index vr_list_del(vr_list* list,vr_index index,vr_val_des_func des)
 {
-  vr_list_node* node=list->head;
-  while(node)
-    {
-      if(node==index)
-	{
-	  node->prev->next=node->next;
-	  node->next->prev=node->prev;
-	  if(list->head=node)
-	    list->head=node->next;
-	  if(list->foot=node)
-	    list->foot=node->prev;
-	  vr_list_node_des(node,des);
-	  break;
-	}
-      if(list->foot==node) break;
-      index=index->next;
+  vr_list_node* next_index=NULL;
+  if(list->head==index&&list->foot==index){
+    list->head=NULL;
+    list->foot=NULL;
+  }else{
+    index->prev->next=index->next;
+    index->next->prev=index->prev;
+    if(list->head==index){
+      list->head=index->next;
+      next_index=list->head;
+    }else if(list->foot==index){
+      list->foot=index->prev;
+    }else{
+      next_index=index->next;
     }
-  return --list->length;
+  }
+  vr_list_node_des(index,des);
+  list->length--;
+  return next_index;
 }
 
 void vr_list_cln(vr_list* list,vr_val_des_func des)

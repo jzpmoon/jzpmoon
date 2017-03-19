@@ -112,6 +112,7 @@ void test_list(){
   while(i<10){
     vr_list_append(list,&val[i]);i++;
   }
+  vr_list_del(list,vr_list_head(list),NULL);
   vr_index index=vr_list_head(list);
   while(index){
     void* data=vr_list_index(index);

@@ -39,7 +39,7 @@ vr_index vr_list_prev(vr_list* list,vr_index index);
 VR_DECLARE_EXPORT 
 void* vr_list_index(vr_index index);
 VR_DECLARE_EXPORT 
-int vr_list_del(vr_list* list,vr_index index,vr_val_des_func des);
+vr_index vr_list_del(vr_list* list,vr_index index,vr_val_des_func des);
 VR_DECLARE_EXPORT
 void vr_list_cln(vr_list* list,vr_val_des_func des);
 VR_DECLARE_EXPORT 
