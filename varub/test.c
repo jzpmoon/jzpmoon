@@ -6,7 +6,6 @@
 #include "include/vr_list.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 void des(int* i)
 {
@@ -122,6 +121,7 @@ void test_list(){
 }
 
 int main(){
+  
   test();
   test_queue();
   test_stack();

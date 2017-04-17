@@ -19,6 +19,8 @@ void vr_stack_push(vr_stack* stk,void* val);
 VR_DECLARE_EXPORT
 void* vr_stack_pop(vr_stack* stk,vr_val_des_func des);
 VR_DECLARE_EXPORT
+void* vr_stack_get(vr_stack* stk);
+VR_DECLARE_EXPORT
 void vr_stack_cln(vr_stack* stk,vr_val_des_func des);
 VR_DECLARE_EXPORT
 int vr_stack_size(vr_stack* stk);

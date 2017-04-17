@@ -79,6 +79,11 @@ vr_index vr_list_head(vr_list* list)
   return list->head;
 }
 
+vr_index vr_list_foot(vr_list* list)
+{
+  return list->foot;
+}
+
 vr_index vr_list_next(vr_list* list,vr_index index)
 {
   if(list->foot!=index)

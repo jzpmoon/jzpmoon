@@ -23,7 +23,7 @@ vr_bitree* vr_bitree_new(vr_compare_func comp)
 void vr_bitree_des(vr_bitree* tree,vr_kv_des_func des)
 {
   vr_bitree_cln(tree,des);
-  free(tree);
+  free(tree); 
 }
 
 int vr_bitree_ins(vr_bitree* tree,void* key,void* val)

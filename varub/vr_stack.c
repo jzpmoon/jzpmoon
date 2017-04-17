@@ -30,6 +30,13 @@ void* vr_stack_pop(vr_stack* stk,vr_val_des_func des)
   vr_slist_del(stk,0,des);
   return val;
 }
+void* vr_stack_get(vr_stack* stk)
+{
+  void* val=NULL;
+  VR_STK_EMPTY_CHK(vr_slist_size(stk));
+  val=vr_slist_get(stk,0);
+  return val;
+}
 
 void vr_stack_cln(vr_stack* stk,vr_val_des_func des)
 {

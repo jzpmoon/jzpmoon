@@ -5,7 +5,7 @@
 #include "vr_type.h"
 
 typedef struct vr_list_node vr_list_node,* vr_index;
-typedef struct vr_list vr_list,vr_closure;
+typedef struct vr_list vr_list;
 
 struct vr_list_node
 {
@@ -32,6 +32,8 @@ VR_DECLARE_EXPORT
 void vr_list_sort(vr_list* list,vr_compare_func cmp);
 VR_DECLARE_EXPORT
 vr_index vr_list_head(vr_list* list);
+VR_DECLARE_EXPORT
+vr_index vr_list_foot(vr_list* list);
 VR_DECLARE_EXPORT
 vr_index vr_list_next(vr_list* list,vr_index index);
 VR_DECLARE_EXPORT

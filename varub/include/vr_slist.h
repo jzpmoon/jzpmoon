@@ -42,6 +42,8 @@ void vr_slist_upd(vr_slist* ls,void* val,int pos);
 VR_DECLARE_EXPORT
 void* vr_slist_get(vr_slist* ls,int pos);
 VR_DECLARE_EXPORT
+void vr_slist_trav(vr_slist* ls,void(*trav_hook)(int,void*));
+VR_DECLARE_EXPORT
 void vr_slist_del(vr_slist* ls,int pos,vr_val_des_func des);
 VR_DECLARE_EXPORT
 void vr_slist_cln(vr_slist* ls,vr_val_des_func des);

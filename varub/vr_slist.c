@@ -109,6 +109,17 @@ void* vr_slist_get(vr_slist* ls,int pos)
   nd=vr_slist_get_nd(ls,pos);
   return vr_slist_nd_get(nd);
 }
+void vr_slist_trav(vr_slist* ls,void(*trav_hook)(int,void*))
+{
+  int i=0;
+  int sz=ls->size;
+  vr_slist_nd* nd=ls->head;
+  while(i<sz){
+    trav_hook(i,nd->val);
+    nd=nd->next;
+    i++;
+  }
+}
 
 void vr_slist_del(vr_slist* ls,int pos,vr_val_des_func des)
 {

@@ -1,7 +1,7 @@
 bin=varub.dll
-obj=vr_slist.obj vr_queue.obj vr_stack.obj vr_bitree.obj vr_rbtree.obj vr_list.obj
+obj=test.obj vr_slist.obj vr_queue.obj vr_stack.obj vr_bitree.obj vr_rbtree.obj vr_list.obj
 $(bin):$(obj)
-	link /DLL /DEBUG /OUT:$@ $(obj)
+	link /DLL /OUT:$@ $(obj)
 .c.obj:
 	cl /c $<
 
