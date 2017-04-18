@@ -7,10 +7,11 @@
 
 #ifdef _MSC_VER 
 #define VR_DECLARE_EXPORT __declspec(dllexport)
-#elif define(_GNUC_)
-#define VR_DECLARE_EXPORT __attribute((visibility("default")))
+#elif defined(__GNUC__)
+#define VR_DECLARE_EXPORT __attribute__((visibility("default")))
 #else
 #define VR_DECLARE_EXPORT
 #endif
 
 #endif
+
